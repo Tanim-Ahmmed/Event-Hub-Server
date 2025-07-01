@@ -6,10 +6,22 @@ const cors = require("cors");
 const port = process.env.PORT || 5000;
 
 // Middleware
+
+const allowedOrigins = [
+  "http://localhost:5173", 
+  "https://event-hub-client-seven.vercel.app", 
+];
+
 app.use(
   cors({
-    origin: "*",
-    credentials: true,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, 
   })
 );
 
